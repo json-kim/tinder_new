@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/data/provider/user_provider.dart';
-import 'package:tinder_app_flutter/ui/screens/start_screen.dart';
-import 'package:tinder_app_flutter/ui/widgets/custom_modal_progress_hud.dart';
-import 'package:tinder_app_flutter/ui/widgets/input_dialog.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_button.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_icon_button.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/data/provider/user_provider.dart';
+import 'package:tinder_new/ui/screens/start_screen.dart';
+import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
+import 'package:tinder_new/ui/widgets/input_dialog.dart';
+import 'package:tinder_new/ui/widgets/rounded_button.dart';
+import 'package:tinder_new/ui/widgets/rounded_icon_button.dart';
+import 'package:tinder_new/util/constants.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -41,15 +41,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return CustomModalProgressHUD(
                     inAsyncCall:
                         userProvider.user == null || userProvider.isLoading,
+                    offset: null,
                     child: userSnapshot.hasData
                         ? Column(children: [
-                            getProfileImage(userSnapshot.data, userProvider),
+                            getProfileImage(userSnapshot.data!, userProvider),
                             SizedBox(height: 20),
                             Text(
-                                '${userSnapshot.data.name}, ${userSnapshot.data.age}',
+                                '${userSnapshot.data!.name}, ${userSnapshot.data!.age}',
                                 style: Theme.of(context).textTheme.headline4),
                             SizedBox(height: 40),
-                            getBio(userSnapshot.data, userProvider),
+                            getBio(userSnapshot.data!, userProvider),
                             Expanded(child: Container()),
                             RoundedButton(
                                 text: 'LOGOUT',
@@ -85,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
               iconData: Icons.edit,
               iconSize: 18,
-              paddingReduce: 4,
+              paddingReduce: 4, buttonColor: null,
             ),
           ],
         ),
@@ -124,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
             iconData: Icons.edit,
-            iconSize: 18,
+            iconSize: 18, buttonColor: null,
           ),
         ),
       ],

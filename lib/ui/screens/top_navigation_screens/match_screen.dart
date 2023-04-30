@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/data/db/entity/chat.dart';
-import 'package:tinder_app_flutter/data/db/entity/match.dart';
-import 'package:tinder_app_flutter/data/db/entity/swipe.dart';
-import 'package:tinder_app_flutter/data/db/remote/firebase_database_source.dart';
-import 'package:tinder_app_flutter/data/provider/user_provider.dart';
-import 'package:tinder_app_flutter/ui/screens/matched_screen.dart';
-import 'package:tinder_app_flutter/ui/widgets/custom_modal_progress_hud.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_icon_button.dart';
-import 'package:tinder_app_flutter/ui/widgets/swipe_card.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
-import 'package:tinder_app_flutter/util/utils.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/data/db/entity/chat.dart';
+import 'package:tinder_new/data/db/entity/match.dart';
+import 'package:tinder_new/data/db/entity/swipe.dart';
+import 'package:tinder_new/data/db/remote/firebase_database_source.dart';
+import 'package:tinder_new/data/provider/user_provider.dart';
+import 'package:tinder_new/ui/screens/matched_screen.dart';
+import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
+import 'package:tinder_new/ui/widgets/rounded_icon_button.dart';
+import 'package:tinder_new/ui/widgets/swipe_card.dart';
+import 'package:tinder_new/util/constants.dart';
+import 'package:tinder_new/util/utils.dart';
 
 class MatchScreen extends StatefulWidget {
   @override
@@ -22,11 +22,11 @@ class MatchScreen extends StatefulWidget {
 class _MatchScreenState extends State<MatchScreen> {
   final FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<String> _ignoreSwipeIds;
+  late List<String> _ignoreSwipeIds;
 
   Future<AppUser> loadPerson(String myUserId) async {
     if (_ignoreSwipeIds == null) {
-      _ignoreSwipeIds = List<String>();
+      _ignoreSwipeIds = <String>[];
       var swipes = await _databaseSource.getSwipes(myUserId);
       for (var i = 0; i < swipes.size; i++) {
         Swipe swipe = Swipe.fromSnapshot(swipes.docs[i]);
@@ -35,12 +35,12 @@ class _MatchScreenState extends State<MatchScreen> {
       _ignoreSwipeIds.add(myUserId);
     }
     var res = await _databaseSource.getPersonsToMatchWith(1, _ignoreSwipeIds);
-    if (res.docs.length > 0) {
+    //if (res.docs.length > 0) {
       var userToMatchWith = AppUser.fromSnapshot(res.docs.first);
       return userToMatchWith;
-    } else {
-      return null;
-    }
+    // } else {
+    //   return null;
+    // }
   }
 
   void personSwiped(AppUser myUser, AppUser otherUser, bool isLiked) async {
@@ -90,9 +90,10 @@ class _MatchScreenState extends State<MatchScreen> {
                 return CustomModalProgressHUD(
                   inAsyncCall:
                       userProvider.user == null || userProvider.isLoading,
+                  offset: null,
                   child: (userSnapshot.hasData)
                       ? FutureBuilder<AppUser>(
-                          future: loadPerson(userSnapshot.data.id),
+                          future: loadPerson(userSnapshot.data!.id),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                     ConnectionState.done &&
@@ -108,6 +109,7 @@ class _MatchScreenState extends State<MatchScreen> {
                             if (!snapshot.hasData) {
                               return CustomModalProgressHUD(
                                 inAsyncCall: true,
+                                offset: null,
                                 child: Container(),
                               );
                             }
@@ -119,7 +121,7 @@ class _MatchScreenState extends State<MatchScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      SwipeCard(person: snapshot.data),
+                                      SwipeCard(person: snapshot.data!),
                                       Expanded(
                                         child: Container(
                                           margin: EdgeInsets.symmetric(
@@ -134,8 +136,8 @@ class _MatchScreenState extends State<MatchScreen> {
                                                 RoundedIconButton(
                                                   onPressed: () {
                                                     personSwiped(
-                                                        userSnapshot.data,
-                                                        snapshot.data,
+                                                        userSnapshot.data!,
+                                                        snapshot.data!,
                                                         false);
                                                   },
                                                   iconData: Icons.clear,
@@ -146,12 +148,12 @@ class _MatchScreenState extends State<MatchScreen> {
                                                 RoundedIconButton(
                                                   onPressed: () {
                                                     personSwiped(
-                                                        userSnapshot.data,
-                                                        snapshot.data,
+                                                        userSnapshot.data!,
+                                                        snapshot.data!,
                                                         true);
                                                   },
                                                   iconData: Icons.favorite,
-                                                  iconSize: 30,
+                                                  iconSize: 30, buttonColor: null,
                                                 ),
                                               ],
                                             ),

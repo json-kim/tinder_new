@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/data/provider/user_provider.dart';
-import 'package:tinder_app_flutter/ui/screens/chat_screen.dart';
-import 'package:tinder_app_flutter/ui/widgets/portrait.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_button.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_outlined_button.dart';
-import 'package:tinder_app_flutter/util/utils.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/data/provider/user_provider.dart';
+import 'package:tinder_new/ui/screens/chat_screen.dart';
+import 'package:tinder_new/ui/widgets/portrait.dart';
+import 'package:tinder_new/ui/widgets/rounded_button.dart';
+import 'package:tinder_new/ui/widgets/rounded_outlined_button.dart';
+import 'package:tinder_new/util/utils.dart';
 
 class MatchedScreen extends StatelessWidget {
   static const String id = 'matched_screen';
@@ -17,19 +17,20 @@ class MatchedScreen extends StatelessWidget {
   final String otherUserId;
 
   MatchedScreen(
-      {@required this.myProfilePhotoPath,
-      @required this.myUserId,
-      @required this.otherUserProfilePhotoPath,
-      @required this.otherUserId});
+      {required this.myProfilePhotoPath,
+      required this.myUserId,
+      required this.otherUserProfilePhotoPath,
+      required this.otherUserId});
 
   void sendMessagePressed(BuildContext context) async {
-    AppUser user = await Provider.of<UserProvider>(context, listen: false).user;
+    AppUser? user =
+        await Provider.of<UserProvider>(context, listen: false).user;
 
     Navigator.pop(context);
     Navigator.pushNamed(context, ChatScreen.id, arguments: {
       "chat_id": compareAndCombineIds(myUserId, otherUserId),
-      "user_id": user.id,
-      "other_user_id": otherUserId
+      "user_id": user!.id,
+      "other_user_id": otherUserId,
     });
   }
 

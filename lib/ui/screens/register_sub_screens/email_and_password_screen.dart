@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/ui/widgets/bordered_text_field.dart';
+import 'package:tinder_new/ui/widgets/bordered_text_field.dart';
 
 class EmailAndPasswordScreen extends StatelessWidget {
   final Function(String) emailOnChanged;
   final Function(String) passwordOnChanged;
 
-  EmailAndPasswordScreen(
-      {@required this.emailOnChanged, @required this.passwordOnChanged});
+  const EmailAndPasswordScreen(
+      {super.key, required this.emailOnChanged, required this.passwordOnChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +18,16 @@ class EmailAndPasswordScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headline3,
         ),
         Text(
-          'Password is',
+          'Password are',
           style: Theme.of(context).textTheme.headline3,
         ),
-        SizedBox(height: 25),
+        const SizedBox(height: 25),
         BorderedTextField(
           labelText: 'Email',
           onChanged: emailOnChanged,
           keyboardType: TextInputType.emailAddress,
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         BorderedTextField(
           labelText: 'Password',
           onChanged: passwordOnChanged,

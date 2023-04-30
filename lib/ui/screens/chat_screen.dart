@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/data/db/entity/chat.dart';
-import 'package:tinder_app_flutter/data/db/entity/message.dart';
-import 'package:tinder_app_flutter/data/db/remote/firebase_database_source.dart';
-import 'package:tinder_app_flutter/ui/widgets/chat_top_bar.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/data/db/entity/chat.dart';
+import 'package:tinder_new/data/db/entity/message.dart';
+import 'package:tinder_new/data/db/remote/firebase_database_source.dart';
+import 'package:tinder_new/ui/widgets/chat_top_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tinder_app_flutter/ui/widgets/message_bubble.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
+import 'package:tinder_new/ui/widgets/message_bubble.dart';
+import 'package:tinder_new/util/constants.dart';
 
 class ChatScreen extends StatelessWidget {
   final ScrollController _scrollController = new ScrollController();
@@ -20,9 +20,9 @@ class ChatScreen extends StatelessWidget {
   final String otherUserId;
 
   ChatScreen(
-      {@required this.chatId,
-      @required this.myUserId,
-      @required this.otherUserId});
+      {required this.chatId,
+      required this.myUserId,
+      required this.otherUserId});
 
   void checkAndUpdateLastMessageSeen(
       Message lastMessage, String messageId, String myUserId) {
@@ -55,7 +55,7 @@ class ChatScreen extends StatelessWidget {
                 stream: _databaseSource.observeUser(otherUserId),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return Container();
-                  return ChatTopBar(user: AppUser.fromSnapshot(snapshot.data));
+                  return ChatTopBar(user: AppUser.fromSnapshot(snapshot.data!));
                 })),
         body: Column(children: [
           Expanded(
@@ -64,17 +64,17 @@ class ChatScreen extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return Container();
                     List<Message> messages = [];
-                    snapshot.data.docs.forEach((element) {
+                    snapshot.data!.docs.forEach((element) {
                       messages.add(Message.fromSnapshot(element));
                     });
-                    if (snapshot.data.docs.length > 0) {
+                    if (snapshot.data!.docs.length > 0) {
                       checkAndUpdateLastMessageSeen(
-                          messages.first, snapshot.data.docs[0].id, myUserId);
+                          messages.first, snapshot.data!.docs[0].id, myUserId);
                     }
                     if (_scrollController.hasClients)
                       _scrollController.jumpTo(0.0);
 
-                    List<bool> showTimeList = new List<bool>(messages.length);
+                    List<bool> showTimeList = [];
 
                     for (int i = messages.length - 1; i >= 0; i--) {
                       bool shouldShow = i == (messages.length - 1)
@@ -142,12 +142,12 @@ class ChatScreen extends StatelessWidget {
                     contentPadding: EdgeInsets.all(0)),
               ),
             ),
-            RaisedButton(
-              padding: EdgeInsets.all(10),
-              highlightElevation: 0,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4)),
+            ElevatedButton(
+              // padding: EdgeInsets.all(10),
+              // highlightElevation: 0,
+              // elevation: 0,
+              // shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(4)),
               child: Text(
                 "SEND",
                 style: Theme.of(context).textTheme.bodyText1,

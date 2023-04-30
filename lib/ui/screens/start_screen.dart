@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
-import 'package:tinder_app_flutter/ui/widgets/app_image_with_text.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_button.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_outlined_button.dart';
-import 'package:tinder_app_flutter/ui/screens/login_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/register_screen.dart';
+import 'package:tinder_new/util/constants.dart';
+import 'package:tinder_new/ui/widgets/app_image_with_text.dart';
+import 'package:tinder_new/ui/widgets/rounded_button.dart';
+import 'package:tinder_new/ui/widgets/rounded_outlined_button.dart';
+import 'package:tinder_new/ui/screens/login_screen.dart';
+import 'package:tinder_new/ui/screens/register_screen.dart';
 
 class StartScreen extends StatelessWidget {
   static const String id = 'start_screen';
@@ -16,30 +16,35 @@ class StartScreen extends StatelessWidget {
         body: Padding(
           padding: kDefaultPadding,
           child: Container(
-            margin: EdgeInsets.only(bottom: 40, top: 120),
+            margin: const EdgeInsets.only(bottom: 40, top: 120),
             child: Column(
               children: [
                 AppIconTitle(),
                 Expanded(child: Container()),
-                Container(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Lorel ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Nulla in orci justo. Curabitur ac gravida quam.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Lorel ipsum dolor sit amet, consectetur adipiscing elit. '
+                    'Nulla in orci justo. Curabitur ac gravida quam.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
-                SizedBox(height: 60),
-                RoundedButton(
-                    text: 'CREATE ACCOUNT',
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, RegisterScreen.id);
-                    }),
-                SizedBox(height: 20),
+                const SizedBox(height: 60),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+                  child: const Text('CREATE ACCOUNT',
+                  style: TextStyle(fontSize: 24),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, RegisterScreen.id);
+                  },
+                ),
+                const SizedBox(height: 20),
                 RoundedOutlinedButton(
                   text: 'LOGIN',
                   onPressed: () => Navigator.pushNamed(context, LoginScreen.id),

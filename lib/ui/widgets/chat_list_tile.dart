@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/data/model/chat_with_user.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
-import 'package:tinder_app_flutter/util/utils.dart';
+import 'package:tinder_new/data/model/chat_with_user.dart';
+import 'package:tinder_new/util/constants.dart';
+import 'package:tinder_new/util/utils.dart';
 
 class ChatListTile extends StatelessWidget {
   final ChatWithUser chatWithUser;
@@ -10,15 +10,14 @@ class ChatListTile extends StatelessWidget {
   final String myUserId;
 
   ChatListTile(
-      {@required this.chatWithUser,
-      @required this.onTap,
-      @required this.onLongPress,
-      @required this.myUserId});
+      {required this.chatWithUser,
+      required this.onTap,
+      required this.onLongPress,
+      required this.myUserId});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
       onLongPress: () {},
       child: Container(
         height: 60,
@@ -51,11 +50,11 @@ class ChatListTile extends StatelessWidget {
   }
 
   bool isLastMessageMyText() {
-    return chatWithUser.chat.lastMessage.senderId == myUserId;
+    return chatWithUser.chat.lastMessage!.senderId == myUserId;
   }
 
   bool isLastMessageSeen() {
-    if (chatWithUser.chat.lastMessage.seen == false &&
+    if (chatWithUser.chat.lastMessage!.seen == false &&
         isLastMessageMyText() == false) {
       return false;
     }
@@ -79,7 +78,7 @@ class ChatListTile extends StatelessWidget {
                 chatWithUser.chat.lastMessage == null
                     ? ''
                     : convertEpochMsToDateTime(
-                        chatWithUser.chat.lastMessage.epochTimeMs),
+                        chatWithUser.chat.lastMessage!.epochTimeMs),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 12))),
       ],
@@ -97,7 +96,7 @@ class ChatListTile extends StatelessWidget {
               chatWithUser.chat.lastMessage == null
                   ? "Write something!"
                   : ((isLastMessageMyText() ? "You: " : "") +
-                      chatWithUser.chat.lastMessage.text),
+                      chatWithUser.chat.lastMessage!.text),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 14),

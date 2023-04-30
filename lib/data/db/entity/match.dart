@@ -5,9 +5,8 @@ class Match {
 
   Match(this.id);
 
-  Match.fromSnapshot(DocumentSnapshot snapshot) {
+  Match.fromSnapshot(DocumentSnapshot snapshot) :
     id = snapshot['id'];
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{'id': id};

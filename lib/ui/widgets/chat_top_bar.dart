@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/util/constants.dart';
 
 class ChatTopBar extends StatelessWidget {
   final AppUser user;
 
-  ChatTopBar({@required this.user});
+  ChatTopBar({required this.user});
 
   @override
   Widget build(BuildContext context) {

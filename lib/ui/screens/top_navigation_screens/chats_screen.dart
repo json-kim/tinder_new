@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/data/model/chat_with_user.dart';
-import 'package:tinder_app_flutter/data/provider/user_provider.dart';
-import 'package:tinder_app_flutter/ui/screens/chat_screen.dart';
-import 'package:tinder_app_flutter/ui/widgets/chats_list.dart';
-import 'package:tinder_app_flutter/ui/widgets/custom_modal_progress_hud.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/data/model/chat_with_user.dart';
+import 'package:tinder_new/data/provider/user_provider.dart';
+import 'package:tinder_new/ui/screens/chat_screen.dart';
+import 'package:tinder_new/ui/widgets/chats_list.dart';
+import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
 
 class ChatsScreen extends StatefulWidget {
   @override
@@ -14,10 +14,10 @@ class ChatsScreen extends StatefulWidget {
 
 class _ChatsScreenState extends State<ChatsScreen> {
   void chatWithUserPressed(ChatWithUser chatWithUser) async {
-    AppUser user = await Provider.of<UserProvider>(context, listen: false).user;
+    AppUser? user = await Provider.of<UserProvider>(context, listen: false).user;
     Navigator.pushNamed(context, ChatScreen.id, arguments: {
       "chat_id": chatWithUser.chat.id,
-      "user_id": user.id,
+      "user_id": user!.id,
       "other_user_id": chatWithUser.user.id
     });
   }
@@ -35,18 +35,20 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 return CustomModalProgressHUD(
                   inAsyncCall:
                       userProvider.user == null || userProvider.isLoading,
+                  offset: null,
                   child: (userSnapshot.hasData)
                       ? FutureBuilder<List<ChatWithUser>>(
                           future: userProvider
-                              .getChatsWithUser(userSnapshot.data.id),
+                              .getChatsWithUser(userSnapshot.data!.id),
                           builder: (context, chatWithUsersSnapshot) {
                             if (chatWithUsersSnapshot.data == null &&
                                 chatWithUsersSnapshot.connectionState !=
                                     ConnectionState.done) {
                               return CustomModalProgressHUD(
-                                  inAsyncCall: true, child: Container());
+                                  inAsyncCall: true, offset: null,
+                                  child: Container());
                             } else {
-                              return chatWithUsersSnapshot.data.length == 0
+                              return chatWithUsersSnapshot.data!.length == 0
                                   ? Center(
                                       child: Container(
                                           child: Text('No matches',
@@ -56,9 +58,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
                                     )
                                   : ChatsList(
                                       chatWithUserList:
-                                          chatWithUsersSnapshot.data,
+                                          chatWithUsersSnapshot.data!,
                                       onChatWithUserTap: chatWithUserPressed,
-                                      myUserId: userSnapshot.data.id,
+                                      myUserId: userSnapshot.data!.id,
                                     );
                             }
                           })

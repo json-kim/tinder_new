@@ -1,18 +1,28 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_app_flutter/data/provider/user_provider.dart';
-import 'package:tinder_app_flutter/ui/screens/chat_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/login_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/matched_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/register_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/splash_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/start_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/top_navigation_screen.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
+import 'package:tinder_new/data/provider/user_provider.dart';
+import 'package:tinder_new/ui/screens/chat_screen.dart';
+import 'package:tinder_new/ui/screens/login_screen.dart';
+import 'package:tinder_new/ui/screens/matched_screen.dart';
+import 'package:tinder_new/ui/screens/register_screen.dart';
+import 'package:tinder_new/ui/screens/splash_screen.dart';
+import 'package:tinder_new/ui/screens/start_screen.dart';
+import 'package:tinder_new/ui/screens/top_navigation_screen.dart';
+import 'package:tinder_new/util/constants.dart';
+import 'package:logging/logging.dart';
+
 
 void main() async {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    if (kDebugMode) {
+      print('${record.level.name}: ${record.time}: ${record.message}');
+    }
+  });
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -22,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(systemNavigationBarColor: Colors.black));
+        const SystemUiOverlayStyle(systemNavigationBarColor: Colors.black));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
@@ -33,10 +43,10 @@ class MyApp extends StatelessWidget {
           buttonColor: kAccentColor,
           indicatorColor: kAccentColor,
           primarySwatch:
-              MaterialColor(kBackgroundColorInt, kThemeMaterialColor),
+          const MaterialColor(kBackgroundColorInt, kThemeMaterialColor),
           scaffoldBackgroundColor: kPrimaryColor,
           hintColor: kSecondaryColor,
-          textTheme: TextTheme(
+          textTheme: const TextTheme(
             headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
             headline2: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
             headline3: TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold),
@@ -48,7 +58,7 @@ class MyApp extends StatelessWidget {
             bodyColor: kSecondaryColor,
             displayColor: kSecondaryColor,
           ),
-          buttonTheme: ButtonThemeData(
+          buttonTheme: const ButtonThemeData(
             splashColor: Colors.transparent,
             padding: EdgeInsets.symmetric(vertical: 14),
             buttonColor: kAccentColor,
@@ -65,24 +75,24 @@ class MyApp extends StatelessWidget {
           RegisterScreen.id: (context) => RegisterScreen(),
           TopNavigationScreen.id: (context) => TopNavigationScreen(),
           MatchedScreen.id: (context) => MatchedScreen(
-                myProfilePhotoPath: (ModalRoute.of(context).settings.arguments
-                    as Map)['my_profile_photo_path'],
-                myUserId: (ModalRoute.of(context).settings.arguments
-                    as Map)['my_user_id'],
-                otherUserProfilePhotoPath: (ModalRoute.of(context)
-                    .settings
-                    .arguments as Map)['other_user_profile_photo_path'],
-                otherUserId: (ModalRoute.of(context).settings.arguments
-                    as Map)['other_user_id'],
-              ),
+            myProfilePhotoPath: (ModalRoute.of(context)!.settings.arguments
+            as Map)['my_profile_photo_path'],
+            myUserId: (ModalRoute.of(context)!.settings.arguments
+            as Map)['my_user_id'],
+            otherUserProfilePhotoPath: (ModalRoute.of(context)!
+                .settings
+                .arguments as Map)['other_user_profile_photo_path'],
+            otherUserId: (ModalRoute.of(context)!.settings.arguments
+            as Map)['other_user_id'],
+          ),
           ChatScreen.id: (context) => ChatScreen(
-                chatId: (ModalRoute.of(context).settings.arguments
-                    as Map)['chat_id'],
-                otherUserId: (ModalRoute.of(context).settings.arguments
-                    as Map)['other_user_id'],
-                myUserId: (ModalRoute.of(context).settings.arguments
-                    as Map)['user_id'],
-              ),
+            chatId: (ModalRoute.of(context)!.settings.arguments
+            as Map)['chat_id'],
+            otherUserId: (ModalRoute.of(context)!.settings.arguments
+            as Map)['other_user_id'],
+            myUserId: (ModalRoute.of(context)!.settings.arguments
+            as Map)['user_id'],
+          ),
         },
       ),
     );

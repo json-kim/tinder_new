@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/data/model/chat_with_user.dart';
-import 'package:tinder_app_flutter/data/model/chats_observer.dart';
-import 'package:tinder_app_flutter/ui/widgets/chat_list_tile.dart';
+import 'package:tinder_new/data/model/chat_with_user.dart';
+import 'package:tinder_new/data/model/chats_observer.dart';
+import 'package:tinder_new/ui/widgets/chat_list_tile.dart';
 
 class ChatsList extends StatefulWidget {
   final List<ChatWithUser> chatWithUserList;
@@ -9,16 +9,16 @@ class ChatsList extends StatefulWidget {
   final String myUserId;
 
   ChatsList(
-      {@required this.chatWithUserList,
-      @required this.onChatWithUserTap,
-      @required this.myUserId});
+      {required this.chatWithUserList,
+      required this.onChatWithUserTap,
+      required this.myUserId});
 
   @override
   _ChatsListState createState() => _ChatsListState();
 }
 
 class _ChatsListState extends State<ChatsList> {
-  ChatsObserver _chatsObserver;
+  late ChatsObserver _chatsObserver;
 
   @override
   void initState() {
@@ -39,23 +39,23 @@ class _ChatsListState extends State<ChatsList> {
   }
 
   bool changeMessageSeen(int index) {
-    return widget.chatWithUserList[index].chat.lastMessage.seen == false &&
-        widget.chatWithUserList[index].chat.lastMessage.senderId !=
+    return widget.chatWithUserList[index].chat.lastMessage!.seen == false &&
+        widget.chatWithUserList[index].chat.lastMessage!.senderId !=
             widget.myUserId;
   }
 
   @override
   Widget build(BuildContext context) {
-    return new ListView.separated(
+    return ListView.separated(
       separatorBuilder: (BuildContext context, int index) =>
-          Divider(color: Colors.grey),
+          const Divider(color: Colors.grey),
       itemCount: widget.chatWithUserList.length,
       itemBuilder: (BuildContext _, int index) => ChatListTile(
         chatWithUser: widget.chatWithUserList[index],
         onTap: () {
           if (widget.chatWithUserList[index].chat.lastMessage != null &&
               changeMessageSeen(index)) {
-            widget.chatWithUserList[index].chat.lastMessage.seen = true;
+            widget.chatWithUserList[index].chat.lastMessage!.seen = true;
             chatUpdated();
           }
           widget.onChatWithUserTap(widget.chatWithUserList[index]);

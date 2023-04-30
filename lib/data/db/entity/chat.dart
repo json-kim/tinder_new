@@ -3,21 +3,20 @@ import 'message.dart';
 
 class Chat {
   String id;
-  Message lastMessage;
+  Message? lastMessage;
 
   Chat(this.id, this.lastMessage);
 
-  Chat.fromSnapshot(DocumentSnapshot snapshot) {
-    id = snapshot['id'];
-    lastMessage = snapshot['last_message'] != null
+  Chat.fromSnapshot(DocumentSnapshot snapshot) :
+    id = snapshot['id'],
+    lastMessage = (snapshot['last_message'] != null
         ? Message.fromMap(snapshot['last_message'])
-        : null;
-  }
+        : null)!;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'last_message': lastMessage != null ? lastMessage.toMap() : null,
+      'last_message': lastMessage != null ? lastMessage!.toMap() : null,
     };
   }
 }

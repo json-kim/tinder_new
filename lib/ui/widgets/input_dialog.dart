@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/ui/widgets/bordered_text_field.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
+import 'package:tinder_new/ui/widgets/bordered_text_field.dart';
+import 'package:tinder_new/util/constants.dart';
 
 class InputDialog extends StatefulWidget {
   final String labelText;
@@ -11,8 +11,8 @@ class InputDialog extends StatefulWidget {
   _InputDialogState createState() => _InputDialogState();
 
   InputDialog(
-      {@required this.labelText,
-      @required this.onSavePressed,
+      {required this.labelText,
+      required this.onSavePressed,
       this.startInputText = ''});
 }
 
@@ -40,8 +40,8 @@ class _InputDialogState extends State<InputDialog> {
         textController: textController,
       ),
       actions: <Widget>[
-        FlatButton(
-          color: kColorPrimaryVariant,
+        TextButton(
+          //color: kColorPrimaryVariant,
           child: Text(
             'CANCEL',
             style: Theme.of(context).textTheme.bodyText1,
@@ -50,8 +50,8 @@ class _InputDialogState extends State<InputDialog> {
             Navigator.pop(context);
           },
         ),
-        FlatButton(
-          color: kAccentColor,
+        TextButton(
+          //color: kAccentColor,
           child: Text(
             'SAVE',
             style: Theme.of(context).textTheme.bodyText1,

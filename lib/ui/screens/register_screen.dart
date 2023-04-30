@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_app_flutter/data/db/remote/response.dart';
-import 'package:tinder_app_flutter/data/model/user_registration.dart';
-import 'package:tinder_app_flutter/data/provider/user_provider.dart';
-import 'package:tinder_app_flutter/ui/screens/register_sub_screens/add_photo_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/register_sub_screens/age_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/register_sub_screens/email_and_password_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/register_sub_screens/name_screen.dart';
-import 'package:tinder_app_flutter/ui/screens/top_navigation_screen.dart';
-import 'package:tinder_app_flutter/ui/widgets/custom_modal_progress_hud.dart';
-import 'package:tinder_app_flutter/ui/widgets/rounded_button.dart';
-import 'package:tinder_app_flutter/util/constants.dart';
-import 'package:tinder_app_flutter/util/utils.dart';
-import 'package:tinder_app_flutter/ui/screens/start_screen.dart';
+import 'package:tinder_new/data/db/remote/response.dart';
+import 'package:tinder_new/data/model/user_registration.dart';
+import 'package:tinder_new/data/provider/user_provider.dart';
+import 'package:tinder_new/ui/screens/register_sub_screens/add_photo_screen.dart';
+import 'package:tinder_new/ui/screens/register_sub_screens/age_screen.dart';
+import 'package:tinder_new/ui/screens/register_sub_screens/email_and_password_screen.dart';
+import 'package:tinder_new/ui/screens/register_sub_screens/name_screen.dart';
+import 'package:tinder_new/ui/screens/top_navigation_screen.dart';
+import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
+import 'package:tinder_new/util/constants.dart';
+import 'package:tinder_new/util/utils.dart';
+import 'package:tinder_new/ui/screens/start_screen.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
@@ -28,19 +29,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final int _endScreenIndex = 3;
   int _currentScreenIndex = 0;
   bool _isLoading = false;
-  UserProvider _userProvider;
+  late UserProvider _userProvider;
+  final log = Logger('_RegisterScreenState');
 
   @override
   void initState() {
+    log.fine('initState');
+
     super.initState();
     _userProvider = Provider.of<UserProvider>(context, listen: false);
+
+
   }
 
   void registerUser() async {
+    log.fine('registerUser');
+
     setState(() {
       _isLoading = true;
     });
 
+    log.fine('_userProvide call');
     await _userProvider
         .registerUser(_userRegistration, _scaffoldKey)
         .then((response) {
@@ -72,7 +81,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return NameScreen(
             onChanged: (value) => {_userRegistration.name = value});
       case 1:
-        return AgeScreen(onChanged: (value) => {_userRegistration.age = value});
+        return AgeScreen(
+            onChanged: (value) => {_userRegistration.age = value.toInt()});
       case 2:
         return AddPhotoScreen(
             onPhotoChanged: (value) =>
@@ -118,20 +128,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
-        appBar: AppBar(title: Text('Register')),
+        appBar: AppBar(title: const Text('Register')),
         body: CustomModalProgressHUD(
           inAsyncCall: _isLoading,
+          offset: null,
           child: Container(
-            margin: EdgeInsets.only(bottom: 40),
+            margin: const EdgeInsets.only(bottom: 40),
             child: Column(
               children: [
-                Container(
-                  child: LinearPercentIndicator(
-                      lineHeight: 5,
-                      percent: (_currentScreenIndex / _endScreenIndex),
-                      progressColor: kAccentColor,
-                      padding: EdgeInsets.zero),
-                ),
+                LinearPercentIndicator(
+                    lineHeight: 5,
+                    percent: (_currentScreenIndex / _endScreenIndex),
+                    progressColor: kAccentColor,
+                    padding: EdgeInsets.zero),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -141,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           bottom: 4.0,
                           top: 4.0),
                       child: IconButton(
-                        padding: EdgeInsets.all(0.0),
+                        padding: const EdgeInsets.all(0.0),
                         icon: Icon(
                           _currentScreenIndex == 0
                               ? Icons.clear
@@ -154,31 +163,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       )),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Expanded(
                   child: Container(
                       width: double.infinity,
-                      child: getSubScreen(),
-                      padding: kDefaultPadding.copyWith(top: 0, bottom: 0)),
+                      padding: kDefaultPadding.copyWith(top: 0, bottom: 0),
+                      child: getSubScreen()),
                 ),
                 Container(
                   padding: kDefaultPadding,
-                  child: _currentScreenIndex == (_endScreenIndex)
-                      ? RoundedButton(
-                          text: 'REGISTER',
-                          onPressed: _isLoading == false
-                              ? () => {registerUser()}
-                              : null)
-                      : RoundedButton(
-                          text: 'CONTINUE',
-                          onPressed: () => {
-                            if (canContinueToNextSubScreen())
+                  child: _currentScreenIndex == _endScreenIndex
+                      ? ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                          child: const Text(
+                            'REGISTER',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          onPressed: () {
+                            _isLoading == false
+                                ? registerUser()
+                                : null;
+                          },
+                        )
+                      : ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20))),
+                          child: const Text(
+                            'CONTINUE',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          onPressed: () {
+                            if (canContinueToNextSubScreen()) {
                               setState(() {
                                 _currentScreenIndex++;
-                              })
-                            else
-                              showSnackBar(
-                                  _scaffoldKey, getInvalidRegistrationMessage())
+                              });
+                            } else {
+                              showSnackBarNew(context,
+                                  getInvalidRegistrationMessage());
+                            }
                           },
                         ),
                 ),

@@ -1,24 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tinder_app_flutter/data/db/entity/chat.dart';
-import 'package:tinder_app_flutter/data/db/remote/firebase_auth_source.dart';
-import 'package:tinder_app_flutter/data/db/remote/firebase_database_source.dart';
-import 'package:tinder_app_flutter/data/db/remote/firebase_storage_source.dart';
-import 'package:tinder_app_flutter/data/db/remote/response.dart';
-import 'package:tinder_app_flutter/data/model/chat_with_user.dart';
-import 'package:tinder_app_flutter/data/model/user_registration.dart';
-import 'package:tinder_app_flutter/util/shared_preferences_utils.dart';
-import 'package:tinder_app_flutter/data/db/entity/app_user.dart';
-import 'package:tinder_app_flutter/util/utils.dart';
-import 'package:tinder_app_flutter/data/db/entity/match.dart';
+import 'package:tinder_new/data/db/entity/chat.dart';
+import 'package:tinder_new/data/db/remote/firebase_auth_source.dart';
+import 'package:tinder_new/data/db/remote/firebase_database_source.dart';
+import 'package:tinder_new/data/db/remote/firebase_storage_source.dart';
+import 'package:tinder_new/data/db/remote/response.dart';
+import 'package:tinder_new/data/model/chat_with_user.dart';
+import 'package:tinder_new/data/model/user_registration.dart';
+import 'package:tinder_new/util/shared_preferences_utils.dart';
+import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/util/utils.dart';
+import 'package:tinder_new/data/db/entity/match.dart';
 
 class UserProvider extends ChangeNotifier {
-  FirebaseAuthSource _authSource = FirebaseAuthSource();
-  FirebaseStorageSource _storageSource = FirebaseStorageSource();
-  FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
+  final FirebaseAuthSource _authSource = FirebaseAuthSource();
+  final FirebaseStorageSource _storageSource = FirebaseStorageSource();
+  final FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
 
   bool isLoading = false;
-  AppUser _user;
+  AppUser? _user;
 
   Future<AppUser> get user => _getUser();
 
@@ -26,7 +26,7 @@ class UserProvider extends ChangeNotifier {
       GlobalKey<ScaffoldState> errorScaffoldKey) async {
     Response<dynamic> response = await _authSource.signIn(email, password);
     if (response is Success<UserCredential>) {
-      String id = response.value.user.uid;
+      String id = response.value.user!.uid;
       SharedPreferencesUtil.setUserId(id);
     } else if (response is Error) {
       showSnackBar(errorScaffoldKey, response.message);
@@ -39,7 +39,7 @@ class UserProvider extends ChangeNotifier {
     Response<dynamic> response = await _authSource.register(
         userRegistration.email, userRegistration.password);
     if (response is Success<UserCredential>) {
-      String id = (response as Success<UserCredential>).value.user.uid;
+      String id = response.value.user!.uid;
       response = await _storageSource.uploadUserProfilePhoto(
           userRegistration.localProfilePhotoPath, id);
 
@@ -61,10 +61,10 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<AppUser> _getUser() async {
-    if (_user != null) return _user;
-    String id = await SharedPreferencesUtil.getUserId();
-    _user = AppUser.fromSnapshot(await _databaseSource.getUser(id));
-    return _user;
+    if (_user != null) return _user!;
+    String? id = await SharedPreferencesUtil.getUserId();
+    _user = AppUser.fromSnapshot(await _databaseSource.getUser(id ?? ''));
+    return _user!;
   }
 
   void updateUserProfilePhoto(
@@ -72,11 +72,11 @@ class UserProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     Response<dynamic> response =
-        await _storageSource.uploadUserProfilePhoto(localFilePath, _user.id);
+        await _storageSource.uploadUserProfilePhoto(localFilePath, _user!.id);
     isLoading = false;
     if (response is Success<String>) {
-      _user.profilePhotoPath = response.value;
-      _databaseSource.updateUser(_user);
+      _user!.profilePhotoPath = response.value;
+      _databaseSource.updateUser(_user!);
     } else if (response is Error) {
       showSnackBar(errorScaffoldKey, response.message);
     }
@@ -84,8 +84,8 @@ class UserProvider extends ChangeNotifier {
   }
 
   void updateUserBio(String newBio) {
-    _user.bio = newBio;
-    _databaseSource.updateUser(_user);
+    _user!.bio = newBio;
+    _databaseSource.updateUser(_user!);
     notifyListeners();
   }
 
