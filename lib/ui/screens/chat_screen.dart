@@ -9,7 +9,7 @@ import 'package:tinder_new/ui/widgets/message_bubble.dart';
 import 'package:tinder_new/util/constants.dart';
 
 class ChatScreen extends StatelessWidget {
-  final ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
   final messageTextController = TextEditingController();
 
@@ -20,7 +20,7 @@ class ChatScreen extends StatelessWidget {
   final String otherUserId;
 
   ChatScreen(
-      {required this.chatId,
+      {super.key, required this.chatId,
       required this.myUserId,
       required this.otherUserId});
 
@@ -35,7 +35,7 @@ class ChatScreen extends StatelessWidget {
     }
   }
 
-  bool shouldShowTime(Message currMessage, Message messageBefore) {
+  bool shouldShowTime(Message currMessage, Message? messageBefore) {
     int halfHourInMilli = 1800000;
 
     if (messageBefore != null) {
@@ -64,15 +64,16 @@ class ChatScreen extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return Container();
                     List<Message> messages = [];
-                    snapshot.data!.docs.forEach((element) {
+                    for (var element in snapshot.data!.docs) {
                       messages.add(Message.fromSnapshot(element));
-                    });
-                    if (snapshot.data!.docs.length > 0) {
+                    }
+                    if (snapshot.data!.docs.isNotEmpty) {
                       checkAndUpdateLastMessageSeen(
                           messages.first, snapshot.data!.docs[0].id, myUserId);
                     }
-                    if (_scrollController.hasClients)
+                    if (_scrollController.hasClients) {
                       _scrollController.jumpTo(0.0);
+                    }
 
                     List<bool> showTimeList = [];
 
@@ -126,7 +127,7 @@ class ChatScreen extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.only(left: 8),
+        padding: const EdgeInsets.only(left: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -134,23 +135,25 @@ class ChatScreen extends StatelessWidget {
               child: TextField(
                 controller: messageTextController,
                 textCapitalization: TextCapitalization.sentences,
-                style: TextStyle(color: kSecondaryColor),
+                style: const TextStyle(color: kSecondaryColor),
                 decoration: InputDecoration(
                     labelText: 'Message',
                     labelStyle:
                         TextStyle(color: kSecondaryColor.withOpacity(0.5)),
-                    contentPadding: EdgeInsets.all(0)),
+                    contentPadding: const EdgeInsets.all(0)),
               ),
             ),
             ElevatedButton(
-              // padding: EdgeInsets.all(10),
-              // highlightElevation: 0,
-              // elevation: 0,
-              // shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(4)),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                //highlightElevation: 0,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+              ),
               child: Text(
                 "SEND",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               onPressed: () {
                 sendMessage(myUserId);

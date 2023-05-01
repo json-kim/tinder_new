@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Login'),
+          title: const Text('Login'),
         ),
         body: CustomModalProgressHUD(
           inAsyncCall: _isLoading,
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding: kDefaultPadding,
             child: Container(
-              margin: EdgeInsets.only(bottom: 40),
+              margin: const EdgeInsets.only(bottom: 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,13 +70,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Login to your account',
                     style: Theme.of(context).textTheme.headline3,
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   BorderedTextField(
                     labelText: 'Email',
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) => _inputEmail = value,
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   BorderedTextField(
                     labelText: 'Password',
                     obscureText: true,
@@ -84,7 +84,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) => _inputPassword = value,
                   ),
                   Expanded(child: Container()),
-                  RoundedButton(text: 'LOGIN', onPressed: () => loginPressed())
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                    child: const Text(
+                      'LOGIN',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    onPressed: () {
+                      loginPressed();
+                    },
+                  ),
                 ],
               ),
             ),

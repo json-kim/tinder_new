@@ -25,7 +25,7 @@ class TopNavigationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var tabBar = TabBar(
       tabs: navigationItems
-          .map((navItem) => Container(
+          .map((navItem) => SizedBox(
               height: double.infinity,
               child: Tab(icon: Icon(navItem.iconData, size: 26))))
           .toList(),
@@ -39,19 +39,17 @@ class TopNavigationScreen extends StatelessWidget {
         child: Scaffold(
           appBar: appBar,
           body: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Container(
+            physics: const NeverScrollableScrollPhysics(),
+            child: SizedBox(
               height: MediaQuery.of(context).size.height -
                   tabBar.preferredSize.height -
                   appBar.preferredSize.height,
               width: MediaQuery.of(context).size.width,
-              child: Container(
-                child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
-                    children: navigationItems
-                        .map((navItem) => navItem.screen)
-                        .toList()),
-              ),
+              child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: navigationItems
+                      .map((navItem) => navItem.screen)
+                      .toList()),
             ),
           ),
         ),

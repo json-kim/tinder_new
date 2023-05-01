@@ -33,11 +33,13 @@ class StartScreen extends StatelessWidget {
                 const SizedBox(height: 60),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 10),
                       shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20))),
-                  child: const Text('CREATE ACCOUNT',
-                  style: TextStyle(fontSize: 24),
+                          borderRadius: BorderRadius.circular(20))),
+                  child: const Text(
+                    'CREATE ACCOUNT',
+                    style: TextStyle(fontSize: 24),
                   ),
                   onPressed: () {
                     Navigator.pop(context);
@@ -47,7 +49,9 @@ class StartScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 RoundedOutlinedButton(
                   text: 'LOGIN',
-                  onPressed: () => Navigator.pushNamed(context, LoginScreen.id),
+                  onPressed: () {
+                    Navigator.pushNamed(context, LoginScreen.id);
+                  },
                 ),
               ],
             ),

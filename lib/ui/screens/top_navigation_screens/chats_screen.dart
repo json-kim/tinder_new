@@ -8,25 +8,30 @@ import 'package:tinder_new/ui/widgets/chats_list.dart';
 import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
 
 class ChatsScreen extends StatefulWidget {
+  const ChatsScreen({super.key});
+
   @override
-  _ChatsScreenState createState() => _ChatsScreenState();
+  ChatsScreenState createState() => ChatsScreenState();
 }
 
-class _ChatsScreenState extends State<ChatsScreen> {
+class ChatsScreenState extends State<ChatsScreen> {
   void chatWithUserPressed(ChatWithUser chatWithUser) async {
-    AppUser? user = await Provider.of<UserProvider>(context, listen: false).user;
-    Navigator.pushNamed(context, ChatScreen.id, arguments: {
-      "chat_id": chatWithUser.chat.id,
-      "user_id": user!.id,
-      "other_user_id": chatWithUser.user.id
-    });
+    AppUser? user =
+        await Provider.of<UserProvider>(context, listen: false).user;
+    if (context.mounted) {
+      Navigator.pushNamed(context, ChatScreen.id, arguments: {
+        "chat_id": chatWithUser.chat.id,
+        "user_id": user!.id,
+        "other_user_id": chatWithUser.user.id
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         child: Consumer<UserProvider>(
           builder: (context, userProvider, child) {
             return FutureBuilder<AppUser>(
@@ -45,16 +50,16 @@ class _ChatsScreenState extends State<ChatsScreen> {
                                 chatWithUsersSnapshot.connectionState !=
                                     ConnectionState.done) {
                               return CustomModalProgressHUD(
-                                  inAsyncCall: true, offset: null,
+                                  inAsyncCall: true,
+                                  offset: null,
                                   child: Container());
                             } else {
-                              return chatWithUsersSnapshot.data!.length == 0
+                              return chatWithUsersSnapshot.data!.isEmpty
                                   ? Center(
-                                      child: Container(
-                                          child: Text('No matches',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4)),
+                                      child: Text('No matches',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineMedium),
                                     )
                                   : ChatsList(
                                       chatWithUserList:

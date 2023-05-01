@@ -11,11 +11,13 @@ import 'package:tinder_new/ui/widgets/rounded_icon_button.dart';
 import 'package:tinder_new/util/constants.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  ProfileScreenState createState() => ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class ProfileScreenState extends State<ProfileScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void logoutPressed(UserProvider userProvider, BuildContext context) async {
@@ -29,34 +31,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 42.0,
           horizontal: 18.0,
         ),
-        margin: EdgeInsets.only(bottom: 40),
+        margin: const EdgeInsets.only(bottom: 40),
         child: Consumer<UserProvider>(builder: (context, userProvider, child) {
           return FutureBuilder<AppUser>(
               future: userProvider.user,
               builder: (context, userSnapshot) {
                 return CustomModalProgressHUD(
                     inAsyncCall:
-                        userProvider.user == null || userProvider.isLoading,
+                        userProvider.isLoading,
                     offset: null,
                     child: userSnapshot.hasData
                         ? Column(children: [
                             getProfileImage(userSnapshot.data!, userProvider),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Text(
                                 '${userSnapshot.data!.name}, ${userSnapshot.data!.age}',
-                                style: Theme.of(context).textTheme.headline4),
-                            SizedBox(height: 40),
+                                style: Theme.of(context).textTheme.headlineMedium),
+                            const SizedBox(height: 40),
                             getBio(userSnapshot.data!, userProvider),
                             Expanded(child: Container()),
-                            RoundedButton(
-                                text: 'LOGOUT',
-                                onPressed: () {
-                                  logoutPressed(userProvider, context);
-                                })
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              onPressed: () {
+                                logoutPressed(userProvider, context);
+                              },
+                              child: const Text('LOGOUT'),
+                            )
                           ])
                         : Container());
               });
@@ -86,14 +94,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
               iconData: Icons.edit,
               iconSize: 18,
-              paddingReduce: 4, buttonColor: null,
+              paddingReduce: 4,
+              buttonColor: null,
             ),
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
-          user.bio.length > 0 ? user.bio : "No bio.",
-          style: Theme.of(context).textTheme.bodyText1,
+          user.bio.isNotEmpty ? user.bio : "No bio.",
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );
@@ -103,13 +112,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Stack(
       children: [
         Container(
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(user.profilePhotoPath),
-            radius: 75,
-          ),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: kAccentColor, width: 1.0),
+          ),
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(user.profilePhotoPath),
+            radius: 75,
           ),
         ),
         Positioned(
@@ -118,14 +127,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: RoundedIconButton(
             onPressed: () async {
               final pickedFile =
-                  await ImagePicker().getImage(source: ImageSource.gallery);
+                  await ImagePicker().pickImage(source: ImageSource.gallery);
               if (pickedFile != null) {
                 firebaseProvider.updateUserProfilePhoto(
                     pickedFile.path, _scaffoldKey);
               }
             },
             iconData: Icons.edit,
-            iconSize: 18, buttonColor: null,
+            iconSize: 18,
+            buttonColor: null,
           ),
         ),
       ],

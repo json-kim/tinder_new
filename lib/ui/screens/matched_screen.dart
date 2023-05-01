@@ -26,12 +26,14 @@ class MatchedScreen extends StatelessWidget {
     AppUser? user =
         await Provider.of<UserProvider>(context, listen: false).user;
 
-    Navigator.pop(context);
-    Navigator.pushNamed(context, ChatScreen.id, arguments: {
-      "chat_id": compareAndCombineIds(myUserId, otherUserId),
-      "user_id": user!.id,
-      "other_user_id": otherUserId,
-    });
+    if (context.mounted) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, ChatScreen.id, arguments: {
+        "chat_id": compareAndCombineIds(myUserId, otherUserId),
+        "user_id": user!.id,
+        "other_user_id": otherUserId,
+      });
+    }
   }
 
   void keepSwipingPressed(BuildContext context) {
@@ -43,23 +45,21 @@ class MatchedScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 42.0,
             horizontal: 18.0,
           ),
-          margin: EdgeInsets.only(bottom: 40),
+          margin: const EdgeInsets.only(bottom: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset('images/tinder_icon.png', width: 40),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Portrait(imageUrl: myProfilePhotoPath),
-                    Portrait(imageUrl: otherUserProfilePhotoPath)
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Portrait(imageUrl: myProfilePhotoPath),
+                  Portrait(imageUrl: otherUserProfilePhotoPath)
+                ],
               ),
               Column(
                 children: [
@@ -68,7 +68,7 @@ class MatchedScreen extends StatelessWidget {
                       onPressed: () {
                         sendMessagePressed(context);
                       }),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   RoundedOutlinedButton(
                       text: 'KEEP SWIPING',
                       onPressed: () {

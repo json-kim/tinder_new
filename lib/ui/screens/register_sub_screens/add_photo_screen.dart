@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tinder_new/ui/widgets/rounded_icon_button.dart';
 import 'package:tinder_new/ui/widgets/image_portrait.dart';
 
 class AddPhotoScreen extends StatefulWidget {
   final Function(String) onPhotoChanged;
 
-  AddPhotoScreen({required this.onPhotoChanged});
+  const AddPhotoScreen({super.key, required this.onPhotoChanged});
 
   @override
-  _AddPhotoScreenState createState() => _AddPhotoScreenState();
+  AddPhotoScreenState createState() => AddPhotoScreenState();
 }
 
-class _AddPhotoScreenState extends State<AddPhotoScreen> {
+class AddPhotoScreenState extends State<AddPhotoScreen> {
   final picker = ImagePicker();
   String? _imagePath;
 
