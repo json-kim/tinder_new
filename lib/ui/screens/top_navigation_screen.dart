@@ -6,20 +6,23 @@ import 'top_navigation_screens/match_screen.dart';
 
 class TopNavigationScreen extends StatelessWidget {
   static const String id = 'top_navigation_screen';
+
   final List<TopNavigationItem> navigationItems = [
     TopNavigationItem(
-      screen: ProfileScreen(),
+      screen: const ProfileScreen(),
       iconData: Icons.person,
     ),
     TopNavigationItem(
-      screen: ChatsScreen(),
+      screen: const ChatsScreen(),
       iconData: Icons.message_rounded,
     ),
     TopNavigationItem(
-      screen: MatchScreen(),
+      screen: const MatchScreen(),
       iconData: Icons.favorite,
     ),
   ];
+
+  TopNavigationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_new/util/constants.dart';
 import 'package:tinder_new/ui/widgets/app_image_with_text.dart';
-import 'package:tinder_new/ui/widgets/rounded_button.dart';
-import 'package:tinder_new/ui/widgets/rounded_outlined_button.dart';
 import 'package:tinder_new/ui/screens/login_screen.dart';
 import 'package:tinder_new/ui/screens/register_screen.dart';
 
 class StartScreen extends StatelessWidget {
   static const String id = 'start_screen';
+
+  const StartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,16 @@ class StartScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 20),
-                RoundedOutlinedButton(
-                  text: 'LOGIN',
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  child: const Text(
+                    'LOGIN',
+                    style: TextStyle(fontSize: 24),
+                  ),
                   onPressed: () {
                     Navigator.pushNamed(context, LoginScreen.id);
                   },

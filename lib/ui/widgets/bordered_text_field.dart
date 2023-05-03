@@ -10,8 +10,9 @@ class BorderedTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final textController;
 
-  BorderedTextField(
-      {required this.labelText,
+  const BorderedTextField(
+      {super.key,
+      required this.labelText,
       required this.onChanged,
       this.keyboardType = TextInputType.text,
       this.obscureText = false,
@@ -34,7 +35,7 @@ class BorderedTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(color: kSecondaryColor.withOpacity(0.5)),
-        border: UnderlineInputBorder(),
+        border: const UnderlineInputBorder(),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: color),
         ),

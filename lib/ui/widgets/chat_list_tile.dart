@@ -9,35 +9,35 @@ class ChatListTile extends StatelessWidget {
   final Function onLongPress;
   final String myUserId;
 
-  ChatListTile(
-      {required this.chatWithUser,
-      required this.onTap,
-      required this.onLongPress,
-      required this.myUserId});
+  const ChatListTile({super.key, required this.chatWithUser, required this.onTap, required this.onLongPress, required this.myUserId});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {},
-      child: Container(
-        height: 60,
+      onLongPress: () {
+        onLongPress.call();
+      },
+      onTap: () {
+        onTap.call();
+      },
+      child: SizedBox(
+        height: 61,
         child: Row(
           children: [
             Container(
               width: 60,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    NetworkImage(chatWithUser.user.profilePhotoPath),
-              ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(color: kAccentColor, width: 1.0),
               ),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(chatWithUser.user.profilePhotoPath),
+              ),
             ),
             Expanded(
                 child: Padding(
-              padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
+              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [getTopRow(), getBottomRow()],
@@ -54,8 +54,7 @@ class ChatListTile extends StatelessWidget {
   }
 
   bool isLastMessageSeen() {
-    if (chatWithUser.chat.lastMessage!.seen == false &&
-        isLastMessageMyText() == false) {
+    if (chatWithUser.chat.lastMessage!.seen == false && isLastMessageMyText() == false) {
       return false;
     }
     return true;
@@ -70,17 +69,11 @@ class ChatListTile extends StatelessWidget {
             chatWithUser.user.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
-        Container(
-            child: Text(
-                chatWithUser.chat.lastMessage == null
-                    ? ''
-                    : convertEpochMsToDateTime(
-                        chatWithUser.chat.lastMessage!.epochTimeMs),
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12))),
+        Text(chatWithUser.chat.lastMessage == null ? '' : convertEpochMsToDateTime(chatWithUser.chat.lastMessage!.epochTimeMs),
+            textAlign: TextAlign.center, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
@@ -95,23 +88,20 @@ class ChatListTile extends StatelessWidget {
             child: Text(
               chatWithUser.chat.lastMessage == null
                   ? "Write something!"
-                  : ((isLastMessageMyText() ? "You: " : "") +
-                      chatWithUser.chat.lastMessage!.text),
+                  : ((isLastMessageMyText() ? "You: " : "") + chatWithUser.chat.lastMessage!.text),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
           ),
         ),
         SizedBox(
             width: 40,
-            child: chatWithUser.chat.lastMessage == null ||
-                    isLastMessageSeen() == false
+            child: chatWithUser.chat.lastMessage == null || isLastMessageSeen() == false
                 ? Container(
                     width: 8,
                     height: 8,
-                    decoration: BoxDecoration(
-                        color: kAccentColor, shape: BoxShape.circle),
+                    decoration: const BoxDecoration(color: kAccentColor, shape: BoxShape.circle),
                   )
                 : null)
       ],

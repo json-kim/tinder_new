@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppIconTitle extends StatelessWidget {
+  const AppIconTitle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Row(

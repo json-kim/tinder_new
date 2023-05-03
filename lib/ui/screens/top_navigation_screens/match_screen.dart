@@ -83,12 +83,12 @@ class MatchScreenState extends State<MatchScreen> {
   }
 
   @override
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
         body: Consumer<UserProvider>(
           builder: (context, userProvider, child) {
-            return FutureBuilder<AppUser>(
+            return FutureBuilder<AppUser?>(
               future: userProvider.user,
               builder: (context, userSnapshot) {
                 return CustomModalProgressHUD(

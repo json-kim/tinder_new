@@ -11,7 +11,7 @@ class Chat {
     id = snapshot['id'],
     lastMessage = (snapshot['last_message'] != null
         ? Message.fromMap(snapshot['last_message'])
-        : null)!;
+        : null);
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

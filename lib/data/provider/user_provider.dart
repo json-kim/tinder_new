@@ -20,7 +20,7 @@ class UserProvider extends ChangeNotifier {
   bool isLoading = false;
   AppUser? _user;
 
-  Future<AppUser> get user => _getUser();
+  Future<AppUser?> get user => _getUser();
 
   Future<Response> loginUser(String email, String password,
       GlobalKey<ScaffoldState> errorScaffoldKey) async {
@@ -60,11 +60,11 @@ class UserProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<AppUser> _getUser() async {
+  Future<AppUser?> _getUser() async {
     if (_user != null) return _user!;
     String? id = await SharedPreferencesUtil.getUserId();
     _user = AppUser.fromSnapshot(await _databaseSource.getUser(id ?? ''));
-    return _user!;
+    return _user;
   }
 
   void updateUserProfilePhoto(

@@ -19,11 +19,13 @@ import 'package:tinder_new/ui/screens/start_screen.dart';
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
 
+  const RegisterScreen({super.key});
+
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  RegisterScreenState createState() => RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
   final UserRegistration _userRegistration = UserRegistration();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final int _endScreenIndex = 3;

@@ -8,15 +8,12 @@ class InputDialog extends StatefulWidget {
   final String startInputText;
 
   @override
-  _InputDialogState createState() => _InputDialogState();
+  InputDialogState createState() => InputDialogState();
 
-  InputDialog(
-      {required this.labelText,
-      required this.onSavePressed,
-      this.startInputText = ''});
+  const InputDialog({super.key, required this.labelText, required this.onSavePressed, this.startInputText = ''});
 }
 
-class _InputDialogState extends State<InputDialog> {
+class InputDialogState extends State<InputDialog> {
   String inputText = '';
   final textController = TextEditingController();
 
@@ -30,7 +27,7 @@ class _InputDialogState extends State<InputDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: kBackgroundColor,
-      contentPadding: EdgeInsets.all(16.0),
+      contentPadding: const EdgeInsets.all(16.0),
       content: BorderedTextField(
         textCapitalization: TextCapitalization.sentences,
         labelText: widget.labelText,

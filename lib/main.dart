@@ -70,8 +70,8 @@ class MyApp extends StatelessWidget {
         initialRoute: SplashScreen.id,
         routes: {
           SplashScreen.id: (context) => SplashScreen(),
-          StartScreen.id: (context) => StartScreen(),
-          LoginScreen.id: (context) => LoginScreen(),
+          StartScreen.id: (context) => const StartScreen(),
+          LoginScreen.id: (context) => const LoginScreen(),
           RegisterScreen.id: (context) => RegisterScreen(),
           TopNavigationScreen.id: (context) => TopNavigationScreen(),
           MatchedScreen.id: (context) => MatchedScreen(

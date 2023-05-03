@@ -37,7 +37,7 @@ class ProfileScreenState extends State<ProfileScreen> {
         ),
         margin: const EdgeInsets.only(bottom: 40),
         child: Consumer<UserProvider>(builder: (context, userProvider, child) {
-          return FutureBuilder<AppUser>(
+          return FutureBuilder<AppUser?>(
               future: userProvider.user,
               builder: (context, userSnapshot) {
                 return CustomModalProgressHUD(

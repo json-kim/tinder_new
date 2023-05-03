@@ -9,17 +9,17 @@ class ImagePortrait extends StatelessWidget {
   final String imagePath;
   final ImageType imageType;
 
-  ImagePortrait(
-      {required this.imageType, required this.imagePath, this.height = 250.0});
+  const ImagePortrait(
+      {super.key, required this.imageType, required this.imagePath, this.height = 250.0});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: this.height * 0.65,
+      width: height * 0.65,
       height: MediaQuery.of(context).size.height / 3,
       decoration: BoxDecoration(
           border: Border.all(width: 2, color: kAccentColor),
-          borderRadius: BorderRadius.all(Radius.circular(25.0))),
+          borderRadius: const BorderRadius.all(Radius.circular(25.0))),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(22.0),
         child: getImage(),
@@ -33,7 +33,8 @@ class ImagePortrait extends StatelessWidget {
       return Image.file(File(imagePath), fit: BoxFit.fill);
     } else if (imageType == ImageType.ASSET_IMAGE) {
       return Image.asset(imagePath, fit: BoxFit.fitHeight);
-    } else
+    } else {
       return null;
+    }
   }
 }

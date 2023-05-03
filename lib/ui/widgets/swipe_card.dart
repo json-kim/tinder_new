@@ -6,43 +6,39 @@ import 'package:tinder_new/util/constants.dart';
 class SwipeCard extends StatefulWidget {
   final AppUser person;
 
-  SwipeCard({required this.person});
+  const SwipeCard({super.key, required this.person});
 
   @override
-  _SwipeCardState createState() => _SwipeCardState();
+  SwipeCardState createState() => SwipeCardState();
 }
 
-class _SwipeCardState extends State<SwipeCard> {
+class SwipeCardState extends State<SwipeCard> {
   bool showInfo = false;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
+        SizedBox(
           height: MediaQuery.of(context).size.height * 0.725,
           width: MediaQuery.of(context).size.width * 0.85,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25.0),
-            child:
-                Image.network(widget.person.profilePhotoPath, fit: BoxFit.fill),
+            child: Image.network(widget.person.profilePhotoPath, fit: BoxFit.fill),
           ),
         ),
         Positioned(
           bottom: 0,
           left: 0,
           right: 0,
-          child: Container(
-            child: Column(
-              children: [
-                Padding(
-                    padding: showInfo
-                        ? EdgeInsets.symmetric(horizontal: 8, vertical: 4)
-                        : EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                    child: getUserContent(context)),
-                showInfo ? getBottomInfo() : Container(),
-              ],
-            ),
+          child: Column(
+            children: [
+              Padding(
+                  padding:
+                      showInfo ? const EdgeInsets.symmetric(horizontal: 8, vertical: 4) : const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  child: getUserContent(context)),
+              showInfo ? getBottomInfo() : Container(),
+            ],
           ),
         ),
       ],
@@ -62,9 +58,9 @@ class _SwipeCardState extends State<SwipeCard> {
               children: <TextSpan>[
                 TextSpan(
                   text: widget.person.name,
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
-                TextSpan(text: '  ${widget.person.age}', style: TextStyle(fontSize: 20)),
+                TextSpan(text: '  ${widget.person.age}', style: const TextStyle(fontSize: 20)),
               ],
             )),
           ],
@@ -86,14 +82,14 @@ class _SwipeCardState extends State<SwipeCard> {
   Widget getBottomInfo() {
     return Column(
       children: [
-        Divider(
+        const Divider(
           color: kAccentColor,
           thickness: 1.5,
           height: 0,
         ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(25),
               bottomRight: Radius.circular(25),
             ),
@@ -103,14 +99,11 @@ class _SwipeCardState extends State<SwipeCard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                 child: Opacity(
                   opacity: 0.8,
                   child: Text(
-                    widget.person.bio.length > 0
-                        ? widget.person.bio
-                        : "No bio.",
+                    widget.person.bio.isNotEmpty ? widget.person.bio : "No bio.",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),

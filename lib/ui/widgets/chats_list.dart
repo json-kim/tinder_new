@@ -8,16 +8,13 @@ class ChatsList extends StatefulWidget {
   final Function(ChatWithUser) onChatWithUserTap;
   final String myUserId;
 
-  ChatsList(
-      {required this.chatWithUserList,
-      required this.onChatWithUserTap,
-      required this.myUserId});
+  const ChatsList({super.key, required this.chatWithUserList, required this.onChatWithUserTap, required this.myUserId});
 
   @override
-  _ChatsListState createState() => _ChatsListState();
+  ChatsListState createState() => ChatsListState();
 }
 
-class _ChatsListState extends State<ChatsList> {
+class ChatsListState extends State<ChatsList> {
   late ChatsObserver _chatsObserver;
 
   @override
@@ -27,6 +24,7 @@ class _ChatsListState extends State<ChatsList> {
     _chatsObserver.startObservers(chatUpdated);
   }
 
+  @override
   @mustCallSuper
   @protected
   void dispose() {
@@ -40,27 +38,24 @@ class _ChatsListState extends State<ChatsList> {
 
   bool changeMessageSeen(int index) {
     return widget.chatWithUserList[index].chat.lastMessage!.seen == false &&
-        widget.chatWithUserList[index].chat.lastMessage!.senderId !=
-            widget.myUserId;
+        widget.chatWithUserList[index].chat.lastMessage!.senderId != widget.myUserId;
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      separatorBuilder: (BuildContext context, int index) =>
-          const Divider(color: Colors.grey),
+      separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.grey),
       itemCount: widget.chatWithUserList.length,
       itemBuilder: (BuildContext _, int index) => ChatListTile(
         chatWithUser: widget.chatWithUserList[index],
         onTap: () {
-          if (widget.chatWithUserList[index].chat.lastMessage != null &&
-              changeMessageSeen(index)) {
+          if (widget.chatWithUserList[index].chat.lastMessage != null && changeMessageSeen(index)) {
             widget.chatWithUserList[index].chat.lastMessage!.seen = true;
             chatUpdated();
           }
           widget.onChatWithUserTap(widget.chatWithUserList[index]);
         },
-        onLongPress: () {},
+        onLongPress: () { },
         myUserId: widget.myUserId,
       ),
     );

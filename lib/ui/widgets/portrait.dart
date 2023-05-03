@@ -5,16 +5,16 @@ class Portrait extends StatelessWidget {
   final String imageUrl;
   final double height;
 
-  Portrait({required this.imageUrl, this.height = 225.0});
+  const Portrait({super.key, required this.imageUrl, this.height = 225.0});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: this.height * 0.65,
+      width: height * 0.65,
       height: height,
       decoration: BoxDecoration(
           border: Border.all(width: 2, color: kAccentColor),
-          borderRadius: BorderRadius.all(Radius.circular(25.0))),
+          borderRadius: const BorderRadius.all(Radius.circular(25.0))),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(22.0),
         child: imageUrl.isNotEmpty

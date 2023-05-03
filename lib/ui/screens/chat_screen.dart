@@ -19,13 +19,9 @@ class ChatScreen extends StatelessWidget {
   final String myUserId;
   final String otherUserId;
 
-  ChatScreen(
-      {super.key, required this.chatId,
-      required this.myUserId,
-      required this.otherUserId});
+  ChatScreen({super.key, required this.chatId, required this.myUserId, required this.otherUserId});
 
-  void checkAndUpdateLastMessageSeen(
-      Message lastMessage, String messageId, String myUserId) {
+  void checkAndUpdateLastMessageSeen(Message lastMessage, String messageId, String myUserId) {
     if (lastMessage.seen == false && lastMessage.senderId != myUserId) {
       lastMessage.seen = true;
       Chat updatedChat = Chat(chatId, lastMessage);
@@ -39,8 +35,7 @@ class ChatScreen extends StatelessWidget {
     int halfHourInMilli = 1800000;
 
     if (messageBefore != null) {
-      if ((messageBefore.epochTimeMs - currMessage.epochTimeMs).abs() >
-          halfHourInMilli) {
+      if ((messageBefore.epochTimeMs - currMessage.epochTimeMs).abs() > halfHourInMilli) {
         return true;
       }
     }
@@ -68,21 +63,20 @@ class ChatScreen extends StatelessWidget {
                       messages.add(Message.fromSnapshot(element));
                     }
                     if (snapshot.data!.docs.isNotEmpty) {
-                      checkAndUpdateLastMessageSeen(
-                          messages.first, snapshot.data!.docs[0].id, myUserId);
+                      checkAndUpdateLastMessageSeen(messages.first, snapshot.data!.docs[0].id, myUserId);
                     }
                     if (_scrollController.hasClients) {
                       _scrollController.jumpTo(0.0);
                     }
 
-                    List<bool> showTimeList = [];
+                    // List<bool> showTimeList = [];
+                    // for (int i = messages.length - 1; i >= 0; i--) {
+                    //   bool shouldShow = i == (messages.length - 1)
+                    //       ? true
+                    //       : shouldShowTime(messages[i], messages[i + 1]);
+                    //   showTimeList[i] = shouldShow;
+                    List<bool> showTimeList = List<bool>.generate(messages.length, (i) => i == (messages.length - 1)  || shouldShowTime(messages[i], messages[i + 1]));
 
-                    for (int i = messages.length - 1; i >= 0; i--) {
-                      bool shouldShow = i == (messages.length - 1)
-                          ? true
-                          : shouldShowTime(messages[i], messages[i + 1]);
-                      showTimeList[i] = shouldShow;
-                    }
                     return ListView.builder(
                       shrinkWrap: true,
                       reverse: true,
@@ -94,8 +88,7 @@ class ChatScreen extends StatelessWidget {
                           title: MessageBubble(
                               epochTimeMs: item.epochTimeMs,
                               text: item.text,
-                              isSenderMyUser:
-                                  messages[index].senderId == myUserId,
+                              isSenderMyUser: messages[index].senderId == myUserId,
                               includeTime: showTimeList[index]),
                         );
                       },
@@ -108,8 +101,7 @@ class ChatScreen extends StatelessWidget {
   void sendMessage(String myUserId) {
     if (messageTextController.text.isEmpty) return;
 
-    Message message = Message(DateTime.now().millisecondsSinceEpoch, false,
-        myUserId, messageTextController.text);
+    Message message = Message(DateTime.now().millisecondsSinceEpoch, false, myUserId, messageTextController.text);
     Chat updatedChat = Chat(chatId, message);
     _databaseSource.addMessage(chatId, message);
     _databaseSource.updateChat(updatedChat);
@@ -137,10 +129,7 @@ class ChatScreen extends StatelessWidget {
                 textCapitalization: TextCapitalization.sentences,
                 style: const TextStyle(color: kSecondaryColor),
                 decoration: InputDecoration(
-                    labelText: 'Message',
-                    labelStyle:
-                        TextStyle(color: kSecondaryColor.withOpacity(0.5)),
-                    contentPadding: const EdgeInsets.all(0)),
+                    labelText: 'Message', labelStyle: TextStyle(color: kSecondaryColor.withOpacity(0.5)), contentPadding: const EdgeInsets.all(0)),
               ),
             ),
             ElevatedButton(
@@ -148,8 +137,7 @@ class ChatScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 //highlightElevation: 0,
                 elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),
               child: Text(
                 "SEND",

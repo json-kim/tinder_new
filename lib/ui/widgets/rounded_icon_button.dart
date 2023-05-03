@@ -7,13 +7,8 @@ class RoundedIconButton extends StatelessWidget {
   final paddingReduce;
   final Color? buttonColor;
 
-  RoundedIconButton(
-      {super.key,
-      required this.onPressed,
-      required this.iconData,
-      this.iconSize = 30,
-      required this.buttonColor,
-      this.paddingReduce = 0});
+  const RoundedIconButton(
+      {super.key, required this.onPressed, required this.iconData, this.iconSize = 30, required this.buttonColor, this.paddingReduce = 0});
 
   @override
   Widget build(BuildContext context) {

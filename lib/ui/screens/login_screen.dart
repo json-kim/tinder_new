@@ -6,17 +6,18 @@ import 'package:tinder_new/data/provider/user_provider.dart';
 import 'package:tinder_new/ui/screens/top_navigation_screen.dart';
 import 'package:tinder_new/ui/widgets/bordered_text_field.dart';
 import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
-import 'package:tinder_new/ui/widgets/rounded_button.dart';
 import 'package:tinder_new/util/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
 
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _inputEmail = '';

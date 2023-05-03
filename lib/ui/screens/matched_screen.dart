@@ -16,15 +16,11 @@ class MatchedScreen extends StatelessWidget {
   final String otherUserProfilePhotoPath;
   final String otherUserId;
 
-  MatchedScreen(
-      {required this.myProfilePhotoPath,
-      required this.myUserId,
-      required this.otherUserProfilePhotoPath,
-      required this.otherUserId});
+  const MatchedScreen(
+      {super.key, required this.myProfilePhotoPath, required this.myUserId, required this.otherUserProfilePhotoPath, required this.otherUserId});
 
   void sendMessagePressed(BuildContext context) async {
-    AppUser? user =
-        await Provider.of<UserProvider>(context, listen: false).user;
+    AppUser? user = await Provider.of<UserProvider>(context, listen: false).user;
 
     if (context.mounted) {
       Navigator.pop(context);
@@ -56,21 +52,19 @@ class MatchedScreen extends StatelessWidget {
               Image.asset('images/tinder_icon.png', width: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Portrait(imageUrl: myProfilePhotoPath),
-                  Portrait(imageUrl: otherUserProfilePhotoPath)
-                ],
+                children: [Portrait(imageUrl: myProfilePhotoPath), Portrait(imageUrl: otherUserProfilePhotoPath)],
               ),
               Column(
                 children: [
-                  RoundedButton(
-                      text: 'SEND MESSAGE',
-                      onPressed: () {
-                        sendMessagePressed(context);
-                      }),
+                  ElevatedButton(
+                    child: const Text('SEND MESSAGE'),
+                    onPressed: () {
+                      sendMessagePressed(context);
+                    },
+                  ),
                   const SizedBox(height: 20),
-                  RoundedOutlinedButton(
-                      text: 'KEEP SWIPING',
+                  ElevatedButton(
+                      child: const Text('KEEP SWIPING'),
                       onPressed: () {
                         keepSwipingPressed(context);
                       }),

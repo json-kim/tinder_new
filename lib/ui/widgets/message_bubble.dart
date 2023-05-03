@@ -8,47 +8,41 @@ class MessageBubble extends StatelessWidget {
   final bool isSenderMyUser;
   final bool includeTime;
 
-  MessageBubble(
-      {required this.epochTimeMs,
-      required this.text,
-      required this.isSenderMyUser,
-      required this.includeTime});
+  const MessageBubble({super.key, required this.epochTimeMs, required this.text, required this.isSenderMyUser, required this.includeTime});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment:
-            isSenderMyUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isSenderMyUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          this.includeTime
+          includeTime
               ? Opacity(
                   opacity: 0.4,
-                  child: Container(
+                  child: SizedBox(
+                    width: double.infinity,
                     child: Text(convertEpochMsToDateTime(epochTimeMs),
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontSize: 14, fontWeight: FontWeight.normal)),
-                    width: double.infinity,
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14, fontWeight: FontWeight.normal)),
                   ),
                 )
               : Container(),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Container(
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.75),
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
             child: Material(
               borderRadius: BorderRadius.circular(8.0),
               elevation: 5.0,
               color: isSenderMyUser ? kAccentColor : kSecondaryColor,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 child: Text(
                   text,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: isSenderMyUser ? kSecondaryColor : Colors.black,
-                      fontWeight: FontWeight.normal),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: isSenderMyUser ? kSecondaryColor : Colors.black, fontWeight: FontWeight.normal),
                 ),
               ),
             ),
