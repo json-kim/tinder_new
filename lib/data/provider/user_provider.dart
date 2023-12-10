@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_new/data/db/entity/chat.dart';
@@ -41,7 +43,7 @@ class UserProvider extends ChangeNotifier {
     if (response is Success<UserCredential>) {
       String id = response.value.user!.uid;
       response = await _storageSource.uploadUserProfilePhoto(
-          userRegistration.localProfilePhotoPath, id);
+          userRegistration.profileBytes!, id);
 
       if (response is Success<String>) {
         String profilePhotoUrl = response.value;
@@ -67,12 +69,12 @@ class UserProvider extends ChangeNotifier {
     return _user;
   }
 
-  void updateUserProfilePhoto(
-      String localFilePath, GlobalKey<ScaffoldState> errorScaffoldKey) async {
+  void updateUserProfilePhoto(Uint8List localFileBytes,
+      GlobalKey<ScaffoldState> errorScaffoldKey) async {
     isLoading = true;
     notifyListeners();
     Response<dynamic> response =
-        await _storageSource.uploadUserProfilePhoto(localFilePath, _user!.id);
+        await _storageSource.uploadUserProfilePhoto(localFileBytes, _user!.id);
     isLoading = false;
     if (response is Success<String>) {
       _user!.profilePhotoPath = response.value;

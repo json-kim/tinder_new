@@ -41,8 +41,7 @@ class ProfileScreenState extends State<ProfileScreen> {
               future: userProvider.user,
               builder: (context, userSnapshot) {
                 return CustomModalProgressHUD(
-                    inAsyncCall:
-                        userProvider.isLoading,
+                    inAsyncCall: userProvider.isLoading,
                     offset: null,
                     child: userSnapshot.hasData
                         ? Column(children: [
@@ -50,7 +49,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                             const SizedBox(height: 20),
                             Text(
                                 '${userSnapshot.data!.name}, ${userSnapshot.data!.age}',
-                                style: Theme.of(context).textTheme.headlineMedium),
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium),
                             const SizedBox(height: 40),
                             getBio(userSnapshot.data!, userProvider),
                             Expanded(child: Container()),
@@ -129,8 +129,9 @@ class ProfileScreenState extends State<ProfileScreen> {
               final pickedFile =
                   await ImagePicker().pickImage(source: ImageSource.gallery);
               if (pickedFile != null) {
+                final imageBytes = await pickedFile.readAsBytes();
                 firebaseProvider.updateUserProfilePhoto(
-                    pickedFile.path, _scaffoldKey);
+                    imageBytes, _scaffoldKey);
               }
             },
             iconData: Icons.edit,

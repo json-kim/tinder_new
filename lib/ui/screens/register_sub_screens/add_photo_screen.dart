@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tinder_new/ui/widgets/image_portrait.dart';
 
 class AddPhotoScreen extends StatefulWidget {
-  final Function(String) onPhotoChanged;
+  final Function(Uint8List) onPhotoChanged;
 
   const AddPhotoScreen({super.key, required this.onPhotoChanged});
 
@@ -13,16 +15,17 @@ class AddPhotoScreen extends StatefulWidget {
 
 class AddPhotoScreenState extends State<AddPhotoScreen> {
   final picker = ImagePicker();
-  String? _imagePath;
+  Uint8List? _imageBytes;
 
   Future pickImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      widget.onPhotoChanged(pickedFile.path);
+      final bytes = await pickedFile.readAsBytes();
+      widget.onPhotoChanged(bytes);
 
       setState(() {
-        _imagePath = pickedFile.path;
+        _imageBytes = bytes;
       });
     }
   }
@@ -43,20 +46,20 @@ class AddPhotoScreenState extends State<AddPhotoScreen> {
               Stack(
                 children: [
                   Container(
-                    child: _imagePath == null
+                    child: _imageBytes == null
                         ? ImagePortrait(
                             imageType: ImageType.NONE,
                             imagePath: '',
                           )
                         : ImagePortrait(
-                            imagePath: _imagePath!,
-                            imageType: ImageType.FILE_IMAGE,
+                            bytes: _imageBytes,
+                            imageType: ImageType.MEMORY_IMAGE,
                           ),
                   ),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
-                      child: _imagePath == null
+                      child: _imageBytes == null
                           ? ElevatedButton(
                               onPressed: pickImageFromGallery,
                               style: ElevatedButton.styleFrom(

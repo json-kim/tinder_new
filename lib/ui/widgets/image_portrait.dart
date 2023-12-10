@@ -1,16 +1,23 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:tinder_new/util/constants.dart';
 import 'dart:io';
 
-enum ImageType { ASSET_IMAGE, FILE_IMAGE, NONE }
+enum ImageType { ASSET_IMAGE, FILE_IMAGE, MEMORY_IMAGE, NONE }
 
 class ImagePortrait extends StatelessWidget {
   final double height;
-  final String imagePath;
+  final String? imagePath;
+  final Uint8List? bytes;
   final ImageType imageType;
 
   const ImagePortrait(
-      {super.key, required this.imageType, required this.imagePath, this.height = 250.0});
+      {super.key,
+      required this.imageType,
+      this.imagePath,
+      this.bytes,
+      this.height = 250.0});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +35,14 @@ class ImagePortrait extends StatelessWidget {
   }
 
   Widget? getImage() {
-    if (imageType == ImageType.NONE || imagePath == null) return null;
+    if (imageType == ImageType.NONE || (imagePath == null && bytes == null))
+      return null;
     if (imageType == ImageType.FILE_IMAGE) {
-      return Image.file(File(imagePath), fit: BoxFit.fill);
+      return Image.file(File(imagePath!), fit: BoxFit.fill);
     } else if (imageType == ImageType.ASSET_IMAGE) {
-      return Image.asset(imagePath, fit: BoxFit.fitHeight);
+      return Image.asset(imagePath!, fit: BoxFit.fitHeight);
+    } else if (imageType == ImageType.MEMORY_IMAGE && bytes != null) {
+      return Image.memory(bytes!, fit: BoxFit.fitHeight);
     } else {
       return null;
     }

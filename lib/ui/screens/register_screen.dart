@@ -15,7 +15,6 @@ import 'package:tinder_new/util/constants.dart';
 import 'package:tinder_new/util/utils.dart';
 import 'package:tinder_new/ui/screens/start_screen.dart';
 
-
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
 
@@ -40,8 +39,6 @@ class RegisterScreenState extends State<RegisterScreen> {
 
     super.initState();
     _userProvider = Provider.of<UserProvider>(context, listen: false);
-
-
   }
 
   void registerUser() async {
@@ -88,7 +85,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       case 2:
         return AddPhotoScreen(
             onPhotoChanged: (value) =>
-                {_userRegistration.localProfilePhotoPath = value});
+                {_userRegistration.profileBytes = value});
       case 3:
         return EmailAndPasswordScreen(
             emailOnChanged: (value) => {_userRegistration.email = value},
@@ -105,7 +102,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       case 1:
         return (_userRegistration.age >= 13 && _userRegistration.age <= 120);
       case 2:
-        return _userRegistration.localProfilePhotoPath.isNotEmpty;
+        return _userRegistration.profileBytes != null;
       default:
         return false;
     }
@@ -186,9 +183,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             style: TextStyle(fontSize: 24),
                           ),
                           onPressed: () {
-                            _isLoading == false
-                                ? registerUser()
-                                : null;
+                            _isLoading == false ? registerUser() : null;
                           },
                         )
                       : ElevatedButton(
@@ -207,8 +202,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 _currentScreenIndex++;
                               });
                             } else {
-                              showSnackBarNew(context,
-                                  getInvalidRegistrationMessage());
+                              showSnackBarNew(
+                                  context, getInvalidRegistrationMessage());
                             }
                           },
                         ),

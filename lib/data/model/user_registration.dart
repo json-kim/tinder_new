@@ -1,7 +1,9 @@
+import 'dart:typed_data';
+
 class UserRegistration {
   String name = '';
   int age = 0;
   String email = '';
   String password = '';
-  String localProfilePhotoPath = '';
+  Uint8List? profileBytes;
 }
