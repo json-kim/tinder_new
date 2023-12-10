@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "778486705033",
-    "project_id": "fensterseifer-tinder",
-    "storage_bucket": "fensterseifer-tinder.appspot.com"
+    "project_number": "714547570522",
+    "project_id": "tiner-test-5f6d6",
+    "storage_bucket": "tiner-test-5f6d6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:778486705033:android:77ba6f7816ac5928750f58",
+        "mobilesdk_app_id": "1:714547570522:android:0d04449a88dff768b6b563",
         "android_client_info": {
           "package_name": "com.fensterseifer.tinder_new"
         }
       },
       "oauth_client": [
         {
-          "client_id": "778486705033-b41vfoe3sheqd1ce6rfp1fm44qp3cach.apps.googleusercontent.com",
+          "client_id": "714547570522-7it9qqkdtlbo58uhrdnpfuca4ebji5b8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCg_glPCH7i84j-_OWBS1yO88_a5KrUJXg"
+          "current_key": "AIzaSyBZ5whVPzOvHogRaZpIBKkpop5wiPVdWJk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "778486705033-b41vfoe3sheqd1ce6rfp1fm44qp3cach.apps.googleusercontent.com",
+              "client_id": "714547570522-7it9qqkdtlbo58uhrdnpfuca4ebji5b8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "714547570522-4il3bc13lp5ohs8dt8gnfqkn551gvb3m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fensterseifer.tinderNew"
+              }
             }
           ]
         }
