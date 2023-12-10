@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tinder_new/data/db/entity/app_user.dart';
+import 'package:tinder_new/data/model/enum/sexual_orientation.dart';
 import 'package:tinder_new/data/provider/user_provider.dart';
 import 'package:tinder_new/ui/screens/start_screen.dart';
 import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
@@ -53,6 +54,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                                     Theme.of(context).textTheme.headlineMedium),
                             const SizedBox(height: 40),
                             getBio(userSnapshot.data!, userProvider),
+                            const SizedBox(height: 40),
+                            getSexualOrientation(
+                                userSnapshot.data!, userProvider),
                             Expanded(child: Container()),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -138,6 +142,42 @@ class ProfileScreenState extends State<ProfileScreen> {
             iconSize: 18,
             buttonColor: null,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget getSexualOrientation(AppUser user, UserProvider userProvider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Sexual Orientation',
+                style: Theme.of(context).textTheme.headline4),
+            PopupMenuButton<SexualOrientation>(
+              padding: EdgeInsets.zero,
+              initialValue: user.sexualOrientation,
+              itemBuilder: (context) => SexualOrientation.values
+                  .map((e) => PopupMenuItem<SexualOrientation>(
+                      value: e, child: Text(e.toEnString())))
+                  .toList(),
+              onSelected: (value) {
+                userProvider.updateSexualOrientation(value);
+              },
+              icon: const Icon(
+                Icons.edit,
+                size: 18,
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
+        const SizedBox(height: 5),
+        Text(
+          user.sexualOrientation.toEnString(),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );

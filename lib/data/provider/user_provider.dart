@@ -8,6 +8,7 @@ import 'package:tinder_new/data/db/remote/firebase_database_source.dart';
 import 'package:tinder_new/data/db/remote/firebase_storage_source.dart';
 import 'package:tinder_new/data/db/remote/response.dart';
 import 'package:tinder_new/data/model/chat_with_user.dart';
+import 'package:tinder_new/data/model/enum/sexual_orientation.dart';
 import 'package:tinder_new/data/model/user_registration.dart';
 import 'package:tinder_new/util/shared_preferences_utils.dart';
 import 'package:tinder_new/data/db/entity/app_user.dart';
@@ -48,10 +49,13 @@ class UserProvider extends ChangeNotifier {
       if (response is Success<String>) {
         String profilePhotoUrl = response.value;
         AppUser user = AppUser(
-            id: id,
-            name: userRegistration.name,
-            age: userRegistration.age,
-            profilePhotoPath: profilePhotoUrl);
+          id: id,
+          name: userRegistration.name,
+          age: userRegistration.age,
+          profilePhotoPath: profilePhotoUrl,
+          sexualOrientation: userRegistration.sexualOrientation ??
+              SexualOrientation.BYONDBINARY,
+        );
         _databaseSource.addUser(user);
         SharedPreferencesUtil.setUserId(id);
         _user = _user;
@@ -112,5 +116,11 @@ class UserProvider extends ChangeNotifier {
       chatWithUserList.add(chatWithUser);
     }
     return chatWithUserList;
+  }
+
+  void updateSexualOrientation(SexualOrientation newSexualOrientation) {
+    _user!.sexualOrientation = newSexualOrientation;
+    _databaseSource.updateUser(_user!);
+    notifyListeners();
   }
 }

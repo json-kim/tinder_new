@@ -9,6 +9,7 @@ import 'package:tinder_new/ui/screens/register_sub_screens/add_photo_screen.dart
 import 'package:tinder_new/ui/screens/register_sub_screens/age_screen.dart';
 import 'package:tinder_new/ui/screens/register_sub_screens/email_and_password_screen.dart';
 import 'package:tinder_new/ui/screens/register_sub_screens/name_screen.dart';
+import 'package:tinder_new/ui/screens/register_sub_screens/sexual_orientation_screen.dart';
 import 'package:tinder_new/ui/screens/top_navigation_screen.dart';
 import 'package:tinder_new/ui/widgets/custom_modal_progress_hud.dart';
 import 'package:tinder_new/util/constants.dart';
@@ -27,7 +28,7 @@ class RegisterScreen extends StatefulWidget {
 class RegisterScreenState extends State<RegisterScreen> {
   final UserRegistration _userRegistration = UserRegistration();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final int _endScreenIndex = 3;
+  final int _endScreenIndex = 4;
   int _currentScreenIndex = 0;
   bool _isLoading = false;
   late UserProvider _userProvider;
@@ -83,10 +84,14 @@ class RegisterScreenState extends State<RegisterScreen> {
         return AgeScreen(
             onChanged: (value) => {_userRegistration.age = value.toInt()});
       case 2:
+        return SexualOrientationScreen(
+            onChanged: (value) =>
+                {_userRegistration.sexualOrientation = value});
+      case 3:
         return AddPhotoScreen(
             onPhotoChanged: (value) =>
                 {_userRegistration.profileBytes = value});
-      case 3:
+      case 4:
         return EmailAndPasswordScreen(
             emailOnChanged: (value) => {_userRegistration.email = value},
             passwordOnChanged: (value) => {_userRegistration.password = value});
@@ -102,6 +107,8 @@ class RegisterScreenState extends State<RegisterScreen> {
       case 1:
         return (_userRegistration.age >= 13 && _userRegistration.age <= 120);
       case 2:
+        return _userRegistration.sexualOrientation != null;
+      case 3:
         return _userRegistration.profileBytes != null;
       default:
         return false;
@@ -115,6 +122,8 @@ class RegisterScreenState extends State<RegisterScreen> {
       case 1:
         return "Invalid age";
       case 2:
+        return "Invalid Sexual Orientation";
+      case 3:
         return "Invalid photo";
       default:
         return "";
