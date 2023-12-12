@@ -11,6 +11,7 @@ import 'package:tinder_new/data/db/remote/response.dart';
 import 'package:tinder_new/data/model/chat_with_user.dart';
 import 'package:tinder_new/data/model/enum/sexual_orientation.dart';
 import 'package:tinder_new/data/model/user_registration.dart';
+import 'package:tinder_new/ui/screens/start_screen.dart';
 import 'package:tinder_new/util/shared_preferences_utils.dart';
 import 'package:tinder_new/data/db/entity/app_user.dart';
 import 'package:tinder_new/util/utils.dart';
@@ -32,6 +33,11 @@ class UserProvider extends ChangeNotifier {
     if (response is Success<UserCredential>) {
       String id = response.value.user!.uid;
       SharedPreferencesUtil.setUserId(id);
+
+      final singInMethod = response.value.credential?.signInMethod;
+      if (singInMethod != null) {
+        SharedPreferencesUtil.setSignInEmthod(singInMethod);
+      }
     } else if (response is Error) {
       showSnackBar(errorScaffoldKey, response.message);
     }
@@ -44,6 +50,11 @@ class UserProvider extends ChangeNotifier {
     if (response is Success<UserCredential>) {
       String id = response.value.user!.uid;
       SharedPreferencesUtil.setUserId(id);
+
+      final singInMethod = response.value.credential?.signInMethod;
+      if (singInMethod != null) {
+        SharedPreferencesUtil.setSignInEmthod(singInMethod);
+      }
     }
     return response;
   }
@@ -133,6 +144,17 @@ class UserProvider extends ChangeNotifier {
   Future<void> logoutUser() async {
     _user = null;
     await SharedPreferencesUtil.removeUserId();
+
+    final signInMethod = await SharedPreferencesUtil.getSignInEmthod();
+
+    switch (signInMethod) {
+      case 'google.com':
+        await googleSignIn.currentUser?.clearAuthCache();
+        await googleSignIn.signOut();
+        break;
+      default:
+    }
+    SharedPreferencesUtil.clear();
   }
 
   Future<List<ChatWithUser>> getChatsWithUser(String userId) async {

@@ -18,6 +18,10 @@ import 'package:google_sign_in_web/google_sign_in_web.dart' as web;
 
 const List<String> scopes = ['email', 'profile'];
 
+final GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: scopes,
+);
+
 class StartScreen extends StatefulWidget {
   static const String id = 'start_screen';
 
@@ -28,13 +32,9 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: scopes,
-  );
-
   @override
   void initState() {
-    _googleSignIn.onCurrentUserChanged.listen(_handleGoogleAccountStateChanged);
+    googleSignIn.onCurrentUserChanged.listen(_handleGoogleAccountStateChanged);
 
     // 자동 로그인 (주석)
     // _googleSignIn.signInSilently();
@@ -43,16 +43,17 @@ class _StartScreenState extends State<StartScreen> {
 
   Future<void> _handleGoogleAccountStateChanged(
       GoogleSignInAccount? account) async {
+    if (account == null) return;
     // In mobile, being authenticated means being authorized...
     bool isAuthorized = account != null;
     // However, in the web...
     if (kIsWeb && account != null) {
-      isAuthorized = await _googleSignIn.canAccessScopes(scopes);
+      isAuthorized = await googleSignIn.canAccessScopes(scopes);
     }
 
     // 권한 없을 경우, 권한 요청
     if (!isAuthorized) {
-      isAuthorized = await _googleSignIn.requestScopes(scopes);
+      isAuthorized = await googleSignIn.requestScopes(scopes);
     }
 
     // 그래도 권한 없으면 리턴
