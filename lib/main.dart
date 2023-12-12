@@ -9,6 +9,7 @@ import 'package:tinder_new/ui/screens/chat_screen.dart';
 import 'package:tinder_new/ui/screens/login_screen.dart';
 import 'package:tinder_new/ui/screens/matched_screen.dart';
 import 'package:tinder_new/ui/screens/register_screen.dart';
+import 'package:tinder_new/ui/screens/register_with_social_screen.dart';
 import 'package:tinder_new/ui/screens/splash_screen.dart';
 import 'package:tinder_new/ui/screens/start_screen.dart';
 import 'package:tinder_new/ui/screens/top_navigation_screen.dart';
@@ -73,6 +74,20 @@ class MyApp extends StatelessWidget {
           StartScreen.id: (context) => const StartScreen(),
           LoginScreen.id: (context) => const LoginScreen(),
           RegisterScreen.id: (context) => RegisterScreen(),
+          RegisterWithSocialScreen.id: (context) => RegisterWithSocialScreen(
+                userEmail: (ModalRoute.of(context)?.settings.arguments
+                        as Map?)?['social_user_email'] ??
+                    '',
+                userName: (ModalRoute.of(context)?.settings.arguments
+                        as Map?)?['social_user_name'] ??
+                    '',
+                userProfilePhotoUrl: (ModalRoute.of(context)?.settings.arguments
+                        as Map?)?['social_user_profile_photo_url'] ??
+                    '',
+                userId: (ModalRoute.of(context)?.settings.arguments
+                        as Map?)?['credential_id'] ??
+                    '',
+              ),
           TopNavigationScreen.id: (context) => TopNavigationScreen(),
           MatchedScreen.id: (context) => MatchedScreen(
                 myProfilePhotoPath: (ModalRoute.of(context)!.settings.arguments

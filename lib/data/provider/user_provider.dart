@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tinder_new/data/db/entity/chat.dart';
 import 'package:tinder_new/data/db/remote/firebase_auth_source.dart';
 import 'package:tinder_new/data/db/remote/firebase_database_source.dart';
@@ -37,14 +38,27 @@ class UserProvider extends ChangeNotifier {
     return response;
   }
 
+  Future<Response> loginWithGoogle(GoogleSignInAccount account) async {
+    final response = await _authSource.signInWithGoogle(account);
+
+    if (response is Success<UserCredential>) {
+      String id = response.value.user!.uid;
+      SharedPreferencesUtil.setUserId(id);
+    }
+    return response;
+  }
+
   Future<Response> registerUser(UserRegistration userRegistration,
       GlobalKey<ScaffoldState> errorScaffoldKey) async {
     Response<dynamic> response = await _authSource.register(
         userRegistration.email, userRegistration.password);
     if (response is Success<UserCredential>) {
       String id = response.value.user!.uid;
-      response = await _storageSource.uploadUserProfilePhoto(
-          userRegistration.profileBytes!, id);
+
+      response = userRegistration.profileImageUrl != null
+          ? Success<String>(userRegistration.profileImageUrl!)
+          : await _storageSource.uploadUserProfilePhoto(
+              userRegistration.profileBytes!, id);
 
       if (response is Success<String>) {
         String profilePhotoUrl = response.value;
@@ -66,11 +80,32 @@ class UserProvider extends ChangeNotifier {
     return response;
   }
 
+  Future<Response> registerUserWithGoogle(UserRegistration userRegistration,
+      String uId, GlobalKey<ScaffoldState> errorScaffoldKey) async {
+    AppUser user = AppUser(
+      id: uId,
+      name: userRegistration.name,
+      age: userRegistration.age,
+      profilePhotoPath: userRegistration.profileImageUrl ?? '',
+      sexualOrientation:
+          userRegistration.sexualOrientation ?? SexualOrientation.BYONDBINARY,
+    );
+    _databaseSource.addUser(user);
+    SharedPreferencesUtil.setUserId(uId);
+    _user = _user;
+    return Response.success(user);
+  }
+
   Future<AppUser?> _getUser() async {
     if (_user != null) return _user!;
     String? id = await SharedPreferencesUtil.getUserId();
-    _user = AppUser.fromSnapshot(await _databaseSource.getUser(id ?? ''));
-    return _user;
+
+    try {
+      _user = AppUser.fromSnapshot(await _databaseSource.getUser(id ?? ''));
+      return _user;
+    } catch (e) {
+      return null;
+    }
   }
 
   void updateUserProfilePhoto(Uint8List localFileBytes,

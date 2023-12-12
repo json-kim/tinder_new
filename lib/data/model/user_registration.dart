@@ -9,4 +9,5 @@ class UserRegistration {
   String password = '';
   SexualOrientation? sexualOrientation;
   Uint8List? profileBytes;
+  String? profileImageUrl;
 }
